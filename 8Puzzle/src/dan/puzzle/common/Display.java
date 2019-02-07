@@ -11,9 +11,12 @@ public class Display extends Canvas implements Runnable{
 	
 	private BufferStrategy bs;
 	
+	private Grid grid;
+	
 	public Display() {
 		setSize(Main.WIDTH, Main.HEIGHT);
 		running = false;
+		grid = new Grid();
 		start();
 	}
 	
@@ -32,7 +35,20 @@ public class Display extends Canvas implements Runnable{
 	}
 	
 	public void run() {
+		long lastTime = System.nanoTime();
+		final double UPDATES = 60.0;
+		final double UPDATE_TIME = 1000000000 / UPDATES;
+		double delta = 0;
+		
 		while(running) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / UPDATE_TIME;
+			lastTime = now;
+			
+			while(delta >= 1) {
+				delta--;
+			}
+			
 			while(!isDisplayable()) {
 				try {
 					Thread.sleep(10);
@@ -52,7 +68,7 @@ public class Display extends Canvas implements Runnable{
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		g.drawLine(100, 100, 200, 200);
+		grid.draw(g);
 		
 		g.dispose();
 		bs.show();
