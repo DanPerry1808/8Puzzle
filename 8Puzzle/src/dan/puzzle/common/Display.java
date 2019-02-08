@@ -94,7 +94,7 @@ public class Display extends Canvas implements Runnable{
 		
 		g.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
 		
-		grid.draw(g);
+		grid.draw(g, 100, 100);
 		
 		g.dispose();
 		bs.show();

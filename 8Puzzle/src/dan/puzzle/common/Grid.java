@@ -1,5 +1,7 @@
 package dan.puzzle.common;
 
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,11 +15,17 @@ public class Grid {
 	private static final int[][] WIN_STATE = new int[][] {{1, 2, 3},{4, 5, 6},{7, 8, 0}};
 	private int[] blankPos;
 	
+	private Font font;
+	private FontMetrics fm;
+	private int fontHeight;
+	private int fontWidth;
+	
 	public Grid() {
 		grid = new int[GRID_SIZE][GRID_SIZE];
 		// Fallback value for blankPos
 		blankPos = new int[] {-1, -1};
 		generateRandomGrid();
+		font = new Font("Arial", Font.BOLD, 100);
 	}
 	
 	public void moveBlank(Direction d) {
@@ -105,14 +113,32 @@ public class Grid {
 		return false;
 	}
 	
-	public void draw(Graphics g) {
+	public void draw(Graphics g, int x, int y) {
+		int fontX;
+		
+		g.setFont(font);
+		
+		if(fm == null) {
+			fm = g.getFontMetrics();
+			fontHeight = fm.getAscent();
+		}
+		
+		for(int i = 0; i < GRID_SIZE + 1; i++) {
+			g.drawLine(x + i * SQUARE_SIZE, y, x + i * SQUARE_SIZE, y + SQUARE_SIZE * GRID_SIZE);
+		}
+		
+		for(int i = 0; i < GRID_SIZE + 1; i++) {
+			g.drawLine(x, y + i * SQUARE_SIZE, x + SQUARE_SIZE * GRID_SIZE, y + i * SQUARE_SIZE);
+		}
+		
 		for(int i = 0; i < GRID_SIZE; i++) {
 			for(int j = 0; j < GRID_SIZE; j++) {
 				if(grid[i][j] != 0) {
-					g.drawString(Integer.toString(grid[i][j]), j * 50 + 50, i * 50 + 50);
+					fontWidth = fm.stringWidth(Integer.toString(grid[i][j]));
+					fontX = (SQUARE_SIZE - fontWidth) / 2;
+					g.drawString(Integer.toString(grid[i][j]), x + (j * SQUARE_SIZE) + fontX, i * SQUARE_SIZE + y + fontHeight);
 				}
 			}
 		}
 	}
-
 }
