@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 
 public class Main extends JFrame{
 	
+	private static final long serialVersionUID = 1L;
+	
 	private static final String TITLE = "8Puzzle";
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 800;
@@ -12,7 +14,7 @@ public class Main extends JFrame{
 		new Main();
 	}
 	
-	public Main() {
+	public Main() {		
 		setTitle(TITLE);
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);

@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Grid {
@@ -30,7 +31,6 @@ public class Grid {
 	
 	public void moveBlank(Direction d) {
 		if(isValidMove(d)) {
-			System.out.println("Valid");
 			switch(d) {
 			case DOWN:
 				// Swaps the zero and the tile it
@@ -57,8 +57,6 @@ public class Grid {
 				grid[blankPos[0]][blankPos[1]] = 0;
 				break;
 			}
-		
-			System.out.println("New blankPos: " + blankPos[0] + ", " + blankPos[1]);
 		}
 	}
 	
@@ -75,6 +73,7 @@ public class Grid {
 			int row = i / GRID_SIZE;
 			int col = i % GRID_SIZE;
 			grid[row][col] = sorted.get(randNum);
+			
 			if(sorted.get(randNum) == 0) {
 				blankPos = new int[] {row, col};
 			}
@@ -111,6 +110,14 @@ public class Grid {
 			}
 		}
 		return false;
+	}
+	
+	public boolean hasWon() {
+		if(Arrays.deepEquals(WIN_STATE, grid)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	public void draw(Graphics g, int x, int y) {

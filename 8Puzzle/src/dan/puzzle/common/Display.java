@@ -6,8 +6,12 @@ import java.awt.image.BufferStrategy;
 
 public class Display extends Canvas implements Runnable{
 	
+	private static final long serialVersionUID = 1L;
+	
 	private Thread thread;
 	private boolean running;
+	
+	private boolean won;
 	
 	private BufferStrategy bs;
 	
@@ -23,6 +27,7 @@ public class Display extends Canvas implements Runnable{
 		grid = new Grid();
 		keys = new KeyTracker();
 		addKeyListener(keys);
+		won = false;
 		start();
 	}
 	
@@ -54,20 +59,25 @@ public class Display extends Canvas implements Runnable{
 			
 			while(delta >= 1) {
 				
-				// If up key, move blank down
-				if(keys.getKeyDown(0)) {
-					grid.moveBlank(Direction.DOWN);
-				// If right key, move blank left
-				}else if(keys.getKeyDown(1)){
-					grid.moveBlank(Direction.LEFT);
-				// If down key pressed, move blank up
-				}else if(keys.getKeyDown(2)) {
-					grid.moveBlank(Direction.UP);
-				// If left key, move blank right
-				}else if(keys.getKeyDown(3)) {
-					grid.moveBlank(Direction.RIGHT);
-				}else if(keys.getKeyDown(4)) {
-					running = false;
+				// Cannot change grid if already won
+				if(!won) {
+					// If up key, move blank down
+					if(keys.getKeyDown(0)) {
+						grid.moveBlank(Direction.DOWN);
+					// If right key, move blank left
+					}else if(keys.getKeyDown(1)){
+						grid.moveBlank(Direction.LEFT);
+					// If down key pressed, move blank up
+					}else if(keys.getKeyDown(2)) {
+						grid.moveBlank(Direction.UP);
+					// If left key, move blank right
+					}else if(keys.getKeyDown(3)) {
+						grid.moveBlank(Direction.RIGHT);
+					}else if(keys.getKeyDown(4)) {
+						running = false;
+					}
+					
+					won = grid.hasWon();
 				}
 				delta--;
 			}
@@ -95,6 +105,10 @@ public class Display extends Canvas implements Runnable{
 		g.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
 		
 		grid.draw(g, 100, 100);
+		
+		if(won) {
+			g.drawString("You win!", 100, 90);
+		}
 		
 		g.dispose();
 		bs.show();
