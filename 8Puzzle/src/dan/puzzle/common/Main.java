@@ -18,6 +18,7 @@ public class Main extends JFrame{
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		requestFocus();
 		add(new Display());
 		pack();
 		setVisible(true);
